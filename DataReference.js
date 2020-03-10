@@ -100,12 +100,12 @@ const STORE = {
       higher_levels: `When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.`
     }
   ],
+
   spellbooks: [
     {
       id: 1,
       spellbook_name: 'Deck 1: Arcane!',
       spellsInBook: [1, 3, 4],
-      classes_selected: [5], // this is OPTIONAL, if a user selects classes for their deck - we'll only show cards for that class when building
       customLayout: {  // not going to do this right now, just trying to figure out my data
         exists: false,
         layout: []
@@ -115,7 +115,6 @@ const STORE = {
       id: 2,
       spellbook_name: 'Deck 2: Whatever',
       spellsInBook: [2, 4],
-      classes_selected: [1, 4], // this is OPTIONAL, if a user selects classes for their deck - we'll only show cards for that class when building
       customLayout: {  // not going to do this right now, just trying to figure out my data
         exists: false,
         layout: []
@@ -124,7 +123,6 @@ const STORE = {
     {
       id: 3,
       spellbook_name: 'Spellbook 3',
-      classes_selected: [6, 7], // this is OPTIONAL, if a user selects classes for their deck - we'll only show cards for that class when building
       customLayout: {  // not going to do this right now, just trying to figure out my data
         exists: false,
         layout: []
