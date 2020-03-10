@@ -2,7 +2,7 @@ CREATE TABLE spellbook_spells (
     id SERIAL PRIMARY KEY,
     spell_name TEXT NOT NULL,
     spell_level INTEGER DEFAULT 0,
-    school TEXT NOT NULL,
+    spell_school TEXT NOT NULL,
     spell_range TEXT,
     cast_time TEXT NOT NULL,
     spell_components TEXT,

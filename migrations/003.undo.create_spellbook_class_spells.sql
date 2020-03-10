@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS class_spells;
+DROP TABLE IF EXISTS spellbook_class_spells;
