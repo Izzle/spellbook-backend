@@ -62,7 +62,7 @@ spellsRouter
     }
     
     // Send 400 if 'spell_level' is not a number or not an integer
-    if(isNaN(spell_level) || !Number.isInteger(spell_level))  {
+    if(isNaN(spell_level) || !Number.isInteger(spell_level)) {
       return res.status(400).json({
         error: `'spell_level' must be an integer number`
       });
