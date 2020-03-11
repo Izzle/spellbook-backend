@@ -28,7 +28,7 @@ const SpellsService = {
       .insert(newSpell)
       .into('spellbook_spells')
       .returning('*')
-      .then(res => console.log(res));
+      .then(res => res[0]);
   }
 };
 

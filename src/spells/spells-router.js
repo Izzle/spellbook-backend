@@ -32,8 +32,6 @@ spellsRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    // OPTIONAL FIELDS: spell_range, spell_components, higher_levels
-
     // get all fields that will be used at all 
     // in this case we dont take an ID because the server will be creating that - we dont POST that
     const { spell_name,
@@ -63,7 +61,8 @@ spellsRouter
       }
     }
     
-    if(isNaN(spell_level))  {
+    // Send 400 if 'spell_level' is not a number or not an integer
+    if(isNaN(spell_level) || !Number.isInteger(spell_level))  {
       return res.status(400).json({
         error: `'spell_level' must be an integer number`
       });
@@ -92,6 +91,7 @@ spellsRouter
 
 
     // Add optional values to newSpell after all validation is complete
+    newSpell.spell_level = spell_level; // spell level isnt optional, but it does have a default value in our DB
     newSpell.spell_range = spell_range;
     newSpell.spell_components = spell_components;
     newSpell.higher_levels = higher_levels;
