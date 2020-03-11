@@ -23,7 +23,13 @@ const SpellsService = {
       .first();
   },
   getSpellsByClass(db, classId){},
-  insertSpell(db, newSpell){}
+  insertSpell(db, newSpell){
+    return db
+      .insert(newSpell)
+      .into('spellbook_spells')
+      .returning('*')
+      .then(res => console.log(res));
+  }
 };
 
 module.exports = SpellsService;

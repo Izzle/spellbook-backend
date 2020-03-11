@@ -10,7 +10,3 @@ CREATE TABLE spellbook_spells (
     spell_description TEXT NOT NULL,
     higher_levels TEXT
 );
-
--- how to do Arrays in PSQL
--- table for spells taht dont matter which class
--- and a table for each class and its version of the spell

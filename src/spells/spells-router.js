@@ -32,6 +32,27 @@ spellsRouter
 
     // HOW DO I WRITE THIS WITH ASYNC AWAIT?
     // Where do I put the 'async' ??
+  })
+  .post(jsonParser, (req, res, next) => {
+    // get all fields that will be used at all 
+    // in this case we dont take an ID because the server will be creating that - we dont POST that
+    const { spell_name,
+      spell_level,
+      spell_school,
+      spell_range,
+      cast_time,
+      spell_components,
+      spell_duration,
+      spell_description,
+      higher_levels } = req.body;
+    // make a newSpell object that we'll add values to after validation
+    // first only adding the REQUIRED fields
+    const newSpell = { spell_name, spell_school, cast_time, spell_duration, spell_description };
+
+    //VALIDATION HERE
+    
+    // add back values to the newSpell object that werent need for validation or required fields
+    // ie newSpell.spell_range = spell_range;
   });
 
 module.exports = spellsRouter;
