@@ -8,5 +8,6 @@ CREATE TABLE spellbook_spells (
     spell_components TEXT,
     spell_duration TEXT NOT NULL,
     spell_description TEXT NOT NULL,
-    higher_levels TEXT
+    higher_levels TEXT 
+    -- will likely have to add a USER_ID column for when I have user management
 );
