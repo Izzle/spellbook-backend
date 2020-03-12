@@ -10,7 +10,7 @@ const jsonParser = express.json();
 const serializeSpell = spell => ({
   id: spell.id,
   spell_name: xss(spell.spell_name),
-  level: spell.level,
+  spell_level: spell.spell_level,
   spell_school: xss(spell.spell_school),
   spell_range: xss(spell.spell_range) || '', // optional field
   cast_time: xss(spell.cast_time),
