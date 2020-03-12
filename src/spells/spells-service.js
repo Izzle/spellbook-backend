@@ -22,11 +22,6 @@ const SpellsService = {
       .where('sp.id', id)
       .first();
   },
-  getSpellsByClass(db, classId){
-    return db.raw(
-      `SELECT * FROM spellbook_spells`
-    );
-  },
   insertSpell(db, newSpell){
     return db
       .insert(newSpell)
