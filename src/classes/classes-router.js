@@ -7,12 +7,19 @@ const classesRouter = express.Router();
 classesRouter
   .route('/')
   .get((req, res, next) => {
-    res.json({ message: 'lol'});
+    ClassesService.getAllClasses(
+      req.app.get('db')
+    )
+      .then(allClasses => {
+        res.json(allClasses);
+      })
+      .catch(next);
   });
 
 classesRouter
   .route('/:id')
   .get((req, res, next) => {
+  // This endpoint will GET the specifed Class by their ID
   // NOTE: We get the STRING '123' instead of the NUMBER 123 because of JSON
     let classId = req.params.id;
     
@@ -32,7 +39,7 @@ classesRouter
       });
     }
 
-    ClassesService.getSpellsByClass(
+    ClassesService.getClassById(
       req.app.get('db'),
       classId
     )
