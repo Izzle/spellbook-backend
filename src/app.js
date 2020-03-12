@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const { NODE_ENV } = require('./config');
 const spellsRouter = require('./spells/spells-router');
+const classesRouter = require('./classes/classes-router');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(helmet());
 app.use(cors());
 
 app.use('/api/spells', spellsRouter);
+app.use('/api/classes', classesRouter);
 
 app.get('/', (req, res, next) => { // eslint-disable-line no-unused-vars
   res.send('Hello, world!');
