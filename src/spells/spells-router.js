@@ -113,7 +113,24 @@ spellsRouter
 spellsRouter
   .route('/:id')
   .get((req, res, next) => {
-    const spellId = req.body.id;
+    // NOTE: We get the STRING '123' instead of the NUMBER 123 because of JSON
+    let spellId = req.params.id;
+    
+    if(spellId == null) {
+      return res.status(400).json({
+        error: `Missing 'id' in params`
+      });
+    }
+
+    // This is will turn our string into a number. If it is a float, it will parseFloat(), if its int it will parseInt()
+    // if it has random text in it, it will return NaN
+    spellId = Number(spellId);
+    // If spellId is NaN or a float it will respond 400
+    if (isNaN(spellId) || !Number.isInteger(spellId)) {
+      return res.status(400).json({
+        error: `'id' must be an integer number`
+      });
+    }
 
     SpellsService.getSpellById(
       req.app.get('db'),
