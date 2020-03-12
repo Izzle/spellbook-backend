@@ -10,15 +10,13 @@ const ClassesService = {
       .select('*')
       .where({ id });
   },
-  getSpellsByClass(db, classId){
+  getClassSpells(db, classId){
     return db
       .from('spellbook_classes')
       .select('*')
-      .where('id', classId);
-    // Need to get all the spells a class can use
-    // return db.raw(
-    //   `SELECT * FROM spellbook_classes WHERE id =${classId}`
-    // );
+      .join('spellbook_class_spells', 'spellbook_classes.id', '=', 'spellbook_class_spells.class_id')
+      .where('class_id', classId);
+     
   }
 };
 

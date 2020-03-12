@@ -49,4 +49,25 @@ classesRouter
       .catch(next);
   });
 
+classesRouter
+  .route('/:id/spells')
+  .get((req, res, next) => {
+  // This endpoint will be to GET all the spells a class has
+  // For example: GET /${paladinId}/spells should return all paladin spells!
+
+    // DO VALIDATION FOR THE LOVE OF GOD
+    // DO VALIDATION FOR THE LOVE OF GOD
+    // DO VALIDATION FOR THE LOVE OF GOD
+    // DO VALIDATION FOR THE LOVE OF GOD
+    // DO VALIDATION FOR THE LOVE OF GOD
+
+    ClassesService.getClassSpells(
+      req.app.get('db'),
+      2 // just testing that my service method works
+    )
+      .then(resp => {
+        res.json(resp);
+      })
+      .catch(next);
+  });
 module.exports = classesRouter;
