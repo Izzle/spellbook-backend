@@ -110,4 +110,19 @@ spellsRouter
       .catch(next);
   });
 
+spellsRouter
+  .route('/:id')
+  .get((req, res, next) => {
+    const spellId = req.body.id;
+
+    SpellsService.getSpellById(
+      req.app.get('db'),
+      spellId
+    )
+      .then(spell => {
+        res.json(serializeSpell(spell));
+      })
+      .catch(next);
+  });
+
 module.exports = spellsRouter;
