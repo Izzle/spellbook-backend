@@ -16,7 +16,7 @@ const serializeSpellBook = spellbook => ({
 });
 
 spellbooksRouter
-  .route('/')
+  .route('/') // All spellbooks
   .get((req, res, next) => {
 
     SpellBooksService.getAllSpellBooks(
@@ -29,7 +29,7 @@ spellbooksRouter
   });
 
 spellbooksRouter
-  .route('/:id')
+  .route('/:id') // A specific spellbook
   .get((req, res, next) => {
     // GET a specified SpellBook by its ID
     // NOTE: We get the STRING '123' instead of the NUMBER 123 because of JSON
@@ -62,4 +62,15 @@ spellbooksRouter
   })
   .post();
 
+spellbooksRouter
+  .route('/:id/spells') // All spells in a specified spellbook
+  .get((req, res, next) => {
+    res.json({ message: 'here are all the spells in this spellbook'});
+  });
+
+spellbooksRouter
+  .route('/:id/frogs')
+  .get((req, res, next) => {
+    res.json({ message: 'here are all frogs in a box'});
+  });
 module.exports = spellbooksRouter;
