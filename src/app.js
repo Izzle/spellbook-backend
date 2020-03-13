@@ -6,6 +6,7 @@ const cors = require('cors');
 const { NODE_ENV } = require('./config');
 const spellsRouter = require('./spells/spells-router');
 const classesRouter = require('./classes/classes-router');
+const spellbooksRouter = require('./spellbooks/spellbooks-router');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors());
 
 app.use('/api/spells', spellsRouter);
 app.use('/api/classes', classesRouter);
+app.use('/api/spellbooks', spellbooksRouter);
 
 app.get('/', (req, res, next) => { // eslint-disable-line no-unused-vars
   res.send('Hello, world!');
