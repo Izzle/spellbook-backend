@@ -7,7 +7,10 @@ const SpellBooksService = require('./spellbooks-service');
 const spellbooksRouter = express.Router();
 const jsonParser = express.json();
 
-const serializeSpellBook = spellbook => ({}); // Dont need to use XSS until I let the users POST a spellbook. CUrrently they cant create them.
+const serializeSpellBook = spellbook => ({
+  id: spellbook.id,
+  spellbook_name: xss(spellbook.spellbook_name) || `Spellbook ${spellbook.id}` // instead of returning 'null' when they havent set a spellbook name, returns Spellbook 3 etc
+});
 
 spellbooksRouter
   .route('/')
@@ -17,7 +20,7 @@ spellbooksRouter
       req.app.get('db')
     )
       .then(spellbooks => {
-        res.json(spellbooks);
+        res.json(spellbooks.map(serializeSpellBook));
       })
       .catch(next);
   });
