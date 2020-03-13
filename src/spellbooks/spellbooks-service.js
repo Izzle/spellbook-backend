@@ -6,9 +6,10 @@ const SpellBooksService = {
   },
   getSpellBookById(db, id){
     return db
-      .from('spellbook_spellbooks')
-      .select('*')
-      .where('id', id);
+      .from('spellbook_spellbooks AS sp')
+      .select('sp.spellbook_name')
+      .where('id', id)
+      .first();
   }
 };
 

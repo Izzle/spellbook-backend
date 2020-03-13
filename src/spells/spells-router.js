@@ -7,6 +7,9 @@ const SpellsService = require('./spells-service');
 const spellsRouter = express.Router();
 const jsonParser = express.json();
 
+// The serialize function will CLEAN UP (e.g. sanitize and/or format) all data before we send it out as a response
+// If you want to LIMIT the data your are responding with, you should SELECT less data from the Database in your knex service
+//   (e.g. if you didn't want to send the ID when a GET request at :id is made)
 const serializeSpell = spell => ({
   id: spell.id,
   spell_name: xss(spell.spell_name),
