@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const SpellBooksService = require('./spellbooks-service');
+const SpellsService = require('../spells/spells-service');
 
 const spellbooksRouter = express.Router();
 const jsonParser = express.json();
@@ -57,7 +58,7 @@ spellbooksRouter
   .post();
 
 spellbooksRouter
-  .route('/:id/spells') // NOT SETUP YET: All spells in a specified spellbook
+  .route('/:id/spells') // All spells in a specified spellbook
   .get((req, res, next) => {
     // NOTE: We get the STRING '123' instead of the NUMBER 123 because of JSON
     let spellbookId = req.params.id;
@@ -82,7 +83,7 @@ spellbooksRouter
       spellbookId
     )
       .then(spells => {
-        res.json(serializeSpellBook(spells));
+        res.json(spells.map(SpellsService.serializeSpell));
       })
       .catch(next);
   });
