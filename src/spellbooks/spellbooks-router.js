@@ -1,5 +1,4 @@
 const express = require('express');
-const xss = require('xss');
 const path = require('path');
 
 const SpellBooksService = require('./spellbooks-service');
@@ -18,7 +17,6 @@ spellbooksRouter
       req.app.get('db')
     )
       .then(spellbooks => {
-        //res.json(spellbooks.map(serializeSpellBook));
         res.json(spellbooks.map(SpellBooksService.serializeSpellBook));
       })
       .catch(next);

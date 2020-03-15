@@ -4,6 +4,8 @@ const ClassesService = require('./classes-service');
 
 const classesRouter = express.Router();
 
+// WARNING: Not using a serialize function here! Might delete this whole endpoint
+
 classesRouter
   .route('/')
   .get((req, res, next) => {
