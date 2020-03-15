@@ -1,3 +1,5 @@
+const xss = require('xss');
+
 const SpellBooksService = {
   getAllSpellBooks(db){
     return db
@@ -28,6 +30,15 @@ const SpellBooksService = {
             ON
               sp_spbook.spell_id = sp.id`)
       .then(resp => resp.rows);
+  },
+  serializeSpellBook(spellbook) {
+  // The serialize function will CLEAN UP (e.g. sanitize and/or format) all data before we send it out as a response
+  // If you want to LIMIT the data your are responding with, you should SELECT less data from the Database in your knex service
+  //   (e.g. if you didn't want to send the ID when a GET request at :id is made)
+    return {
+      id: spellbook.id,
+      spellbook_name: xss(spellbook.spellbook_name) || `Spellbook ${spellbook.id}` // instead of returning 'null' when they havent set a spellbook name, returns Spellbook 3 etc
+    };
   }
 };
 
