@@ -15,6 +15,8 @@ const serializeSpellBook = spellbook => ({
   spellbook_name: xss(spellbook.spellbook_name) || `Spellbook ${spellbook.id}` // instead of returning 'null' when they havent set a spellbook name, returns Spellbook 3 etc
 });
 
+// REMEMBER - FILTERS AND SORTS USE "query parameters"
+//  GETting or modifying data uses "params" instead
 spellbooksRouter
   .route('/') // All spellbooks
   .get((req, res, next) => {
@@ -63,7 +65,7 @@ spellbooksRouter
   .post();
 
 spellbooksRouter
-  .route('/:id/spells') // All spells in a specified spellbook
+  .route('/:id/spells') // NOT SETUP YET: All spells in a specified spellbook
   .get((req, res, next) => {
     res.json({ message: 'here are all the spells in this spellbook'});
   });
@@ -79,8 +81,9 @@ spellbooksRouter
   });
 
 spellbooksRouter
-  .route('/:id/spells/:id') // GET a specific spell in a specific spellbook
+  .route('/:id/spells/:id') // NOT SETUP YET: GET a specific spell in a specific spellbook
   .get((req, res, next) => {
     res.json({ message: 'does this endpoint even need to exists???? need to think of a use case for it....'});
   }); 
+  
 module.exports = spellbooksRouter;
