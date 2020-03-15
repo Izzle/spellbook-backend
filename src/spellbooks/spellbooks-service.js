@@ -28,7 +28,9 @@ const SpellBooksService = {
             JOIN
               spellbook_spells AS sp
             ON
-              sp_spbook.spell_id = sp.id`)
+              sp_spbook.spell_id = sp.id
+            WHERE
+              sp_spbook.spellbook_id = ?`, [id])
       .then(resp => resp.rows);
   },
   serializeSpellBook(spellbook) {
