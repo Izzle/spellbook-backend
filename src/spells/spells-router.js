@@ -119,7 +119,7 @@ spellsRouter
     // NOTE: We get the STRING '123' instead of the NUMBER 123 because of JSON
     let spellId = req.params.id;
     
-    if(spellId == null) {
+    if(spellId == null) { // eslint-disable-line eqeqeq
       return res.status(400).json({
         error: `Missing 'id' in params`
       });

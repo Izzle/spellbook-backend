@@ -37,7 +37,7 @@ spellbooksRouter
     // NOTE: We get the STRING '123' instead of the NUMBER 123 because of JSON
     let spellbookId = req.params.id;
     
-    if(spellbookId == null) {
+    if(spellbookId == null) { // eslint-disable-line eqeqeq
       return res.status(400).json({
         error: `Missing 'id' in params`
       });
@@ -67,17 +67,32 @@ spellbooksRouter
 spellbooksRouter
   .route('/:id/spells') // NOT SETUP YET: All spells in a specified spellbook
   .get((req, res, next) => {
-    res.json({ message: 'here are all the spells in this spellbook'});
-  });
+    // NOTE: We get the STRING '123' instead of the NUMBER 123 because of JSON
+    let spellbookId = req.params.id;
+    
+    if(spellbookId == null) { // eslint-disable-line eqeqeq
+      return res.status(400).json({
+        error: `Missing 'id' in params`
+      });
+    }
 
-spellbooksRouter
-  .route('/:id/frogs')
-  // used this endpoint to test that static endpoints work this way.You CANT have 2 dynamic endpoints in an app
-  //    e.g. you cant have /:spell_id and /:class_id
-  // But you CAN have different STATIC endpoints. e.g. /api/spells and /api/classes 
-  //     (technically you can have as many as you want. do /api/fireball, /api/frostbolt, /api/arcaneblast would all work)
-  .get((req, res, next) => {
-    res.json({ message: 'here are all frogs in a box.'});
+    // This is will turn our string into a number
+    spellbookId = Number(spellbookId);
+    // If spellbookId is NaN or a float it will respond 400
+    if (isNaN(spellbookId) || !Number.isInteger(spellbookId)) {
+      return res.status(400).json({
+        error: `'id' must be an integer number`
+      });
+    }
+
+    SpellBooksService.getAllSpellsInSpellBook(
+      req.app.get('db'),
+      spellbookId
+    )
+      .then(spells => {
+        res.json(serializeSpellBook(spells));
+      })
+      .catch(next);
   });
 
 spellbooksRouter
@@ -85,5 +100,5 @@ spellbooksRouter
   .get((req, res, next) => {
     res.json({ message: 'does this endpoint even need to exists???? need to think of a use case for it....'});
   }); 
-  
+
 module.exports = spellbooksRouter;
