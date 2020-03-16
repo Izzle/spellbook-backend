@@ -33,6 +33,18 @@ const SpellBooksService = {
               sp_spbook.spellbook_id = ?`, [id])
       .then(resp => resp.rows);
   },
+  updateSpellsInSpellBook(db, spellbookId, spell_id) {
+    // ISSUE:
+    // I wanted to make many changes on the frontend, then have them press "SAVE" button to finalize all changes and do a PUT/PATCH then
+    // How can I do an UPDATE that does them all? Should I have my PUT request have an array of the spell IDs and then interate over that in my router
+    // and do many DB changes? or should I try to do them all in one-go in SQL code?
+    // how do I handle removing a spell from the spellbook? Should I just remove everything in the table and repopulate it?
+    // How could I put these all in one transaction??
+    return db
+      .raw(`UPDATE spellbook_spell_spellbooks
+            SET spell_id = ?
+            WHERE spellbook_id = ??`, [spell_id], [spellbookId]);
+  },
   serializeSpellBook(spellbook) {
   // The serialize function will CLEAN UP (e.g. sanitize and/or format) all data before we send it out as a response
   // If you want to LIMIT the data your are responding with, you should SELECT less data from the Database in your knex service

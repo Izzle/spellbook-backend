@@ -55,7 +55,7 @@ spellbooksRouter
       })
       .catch(next);
   })
-  .post();
+  .post(); // create a single spellbook (i.e. Arcane, Holy Paladin spells, etc)
 
 spellbooksRouter
   .route('/:id/spells') // All spells in a specified spellbook
@@ -86,7 +86,19 @@ spellbooksRouter
         res.json(spells.map(SpellsService.serializeSpell));
       })
       .catch(next);
-  });
+  })
+  .put(jsonParser, (req, res, next) => { // replaces all spells in the specified spellbook (e.g. when removing and adding spells to your spellbook)
+    //res.status(204);
+    // NEED VALIDATION. NEEd to interate over an array of spells? maybe
+    SpellBooksService.updateSpellsInSpellBook(
+      req.app.get('db'),
+      2,
+      4
+    ).then(updatedSpell => {
+      res.json(updatedSpell);
+    })
+    // res.json({ message: 'youre teh best at the PUT method yo'});
+  }); 
 
 spellbooksRouter
   .route('/:id/spells/:id') // NOT SETUP YET: GET a specific spell in a specific spellbook
