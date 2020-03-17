@@ -90,6 +90,11 @@ spellbooksRouter
   .put(jsonParser, (req, res, next) => { // replaces all spells in the specified spellbook (e.g. when removing and adding spells to your spellbook)
     //res.status(204);
     // NEED VALIDATION. NEEd to interate over an array of spells? maybe
+
+    // SET CONTENTS OF SPELLBOOK TO THIS
+    // make trx in knex
+    // dleete everything
+    // insert new values
     SpellBooksService.updateSpellsInSpellBook(
       req.app.get('db'),
       2,
