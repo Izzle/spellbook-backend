@@ -89,14 +89,9 @@ spellbooksRouter
   })
   .put(jsonParser, (req, res, next) => { // replaces all spells in the specified spellbook (e.g. when removing and adding spells to your spellbook)
     
-
-    // NEED VALIDATION. NEEd to interate over an array of spells? maybe
-
-
     const { spell_ids } = req.body;
     let spellbookId = req.params.id;
 
-     
     // VALIDATION HERE
     // Validating to make sure that all the required fields are in the request
     const newSpells = {spell_ids, spellbookId};  
@@ -118,10 +113,16 @@ spellbooksRouter
     }
 
     // check that the values spell_ids is an array of integers
+    if(!Array.isArray(spell_ids)) {
+      return res.status(400).json({
+        error: `'spell_ids' must be an Array`
+      });
+    }
+    
     spell_ids.forEach(spell_id => {
       if(isNaN(spell_id) || !Number.isInteger(spell_id)) {
         return res.status(400).json({
-          error: `'spell_ids' must be an array of integer number(s)`
+          error: `'spell_ids' must be contain only integer numbers`
         });
       }
     });
