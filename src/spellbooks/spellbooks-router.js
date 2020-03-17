@@ -133,9 +133,9 @@ spellbooksRouter
       req.app.get('db'),
       spellbookId,
       spell_ids
-    ).then(() => {
-      res.status(204).end();
-    })
+    ).then(
+      res.status(204).end()
+    )
       .catch(next);
   }); 
 
