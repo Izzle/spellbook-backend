@@ -98,10 +98,11 @@ spellbooksRouter
     SpellBooksService.updateSpellsInSpellBook(
       req.app.get('db'),
       2,
-      4
-    ).then(updatedSpell => {
-      res.json(updatedSpell);
+      [2, 3, 4, 5]
+    ).then(newSpellBook => {
+      res.json(newSpellBook);
     })
+      .catch(next);
     // res.json({ message: 'youre teh best at the PUT method yo'});
   }); 
 

@@ -43,23 +43,38 @@ const SpellBooksService = {
   updateSpellsInSpellBook(db, spellbookId, newSpellIds) { 
 
     return db.transaction(trx => {  // they use function(trx) - could my syntax be an issue?
-      db('spellbook_spell_spellbooks')
+      db('spellbook_spell_spellbook')
         .where('spellbook_id', spellbookId)
         .del()
         .transacting(trx)
-        .then(() => {
-          return db.insert({spellbook_id: spellbookId}, 'spell_id') // INSERT INTO spellbook_spell_spellbooks (spellbook_id)
-            .into('spellbook_spell_spellbooks')  // VALUES (spellbookId) RETURNING 'spell_id'
-            .transacting(trx) // should I do a transaction object or a query builder?? How would I chain then in either case?
-            .then(ids => {
-              newSpellIds.forEach(newSpellId => newSpellId.spell_id = ids[0]);
-              return db.insert(newSpellIds)
-                .into('spellbook_spell_spellbooks')
-                .transacting(trx);
-            });
+        .then(() => { 
+          newSpellIds.forEach(newSpell => {
+            // [2, 4, 6]
+            // [{spellbook_id: spellbookId}, {spell_id: newSpellIds[0]}]
+            newSpell = [];
+            const spellbook = {spellbook_id: spellbookId};
+            const spell = {spell_id: newSpellIds[0]};
+            newSpell = [spellbook, spell];
+            // newSpell.spell_id = newSpellIds[0];
+            // newSpell.spellbook_id = spellbookId;
+            return db.insert(newSpell)
+              .into('spellbook_spell_spellbook')
+              .transacting(trx);
+          });
         })
         .then(trx.commit)
         .catch(trx.rollback);
+      // .then(() => {
+      //   return db.insert({spellbook_id: spellbookId}, 'spell_id') // INSERT INTO spellbook_spell_spellbook (spellbook_id)
+      //     .into('spellbook_spell_spellbook')  // VALUES (spellbookId) RETURNING 'spell_id'
+      //     .then(ids => {
+      //       newSpellIds.forEach(newSpellId => newSpellId.spell_id = ids[0]);
+      //       return db.insert(newSpellIds)
+      //         .into('spellbook_spell_spellbook')
+      //         .transacting(trx);
+      //     });
+      // })
+        
     });
     // return db
     //   .raw(`BEGIN;
