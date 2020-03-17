@@ -33,17 +33,52 @@ const SpellBooksService = {
               sp_spbook.spellbook_id = ?`, [id])
       .then(resp => resp.rows);
   },
-  updateSpellsInSpellBook(db, spellbookId, spell_id) {
-    // ISSUE:
-    // I wanted to make many changes on the frontend, then have them press "SAVE" button to finalize all changes and do a PUT/PATCH then
-    // How can I do an UPDATE that does them all? Should I have my PUT request have an array of the spell IDs and then interate over that in my router
-    // and do many DB changes? or should I try to do them all in one-go in SQL code?
-    // how do I handle removing a spell from the spellbook? Should I just remove everything in the table and repopulate it?
-    // How could I put these all in one transaction??
+  updateSpellsInSpellBook(db, spellbookId, newSpellIds) { // newRow should be the data
+    // Rather than UPDATE-ing everything, in this casee it will be simplier to remove everything and add new ones
+
+    // SET CONTENTS OF SPELLBOOK TO THIS
+    // make trx in knex
+    // dleete everything
+    // insert new values
     return db
-      .raw(`UPDATE spellbook_spell_spellbooks
-            SET spell_id = ?
-            WHERE spellbook_id = ??`, [spell_id], [spellbookId]);
+      .raw(`BEGIN;
+            DELETE FROM spellbook_spell_spellbooks WHERE spellbook_id = ${spellbookId} (use ? probably)
+
+            INSERT INTO spellbook_spell_spellbooks (spellbook_id, spell_id)
+            VALUES 
+              (${spellbookId}, ${newSpellIds}), // for each spellId. this will vary depending on # of entries
+              (${spellbookId}, ${newSpellIds}),
+              (${spellbookId}, ${newSpellIds}),
+              (${spellbookId}, ${newSpellIds});
+
+            COMMIT;`)
+      // INPUT (db, spellbookId, newSpellIds)
+      // db = knex
+      // spellbookId = integer
+      // newSpellIds = array of integers ie [3, 4, 5, 6, 12]
+      .transaction(trx => {  // they use function(trx) - could my syntax be an issue?
+        db('spellbook_spell_spellbooks')
+          .where('spellbook_id', spellbookId)
+          .del()
+          .transacting(trx)
+          .then(() => {})
+
+        db.insert({spellbook_id: spellbookId}, 'spell_id') // INSERT INTO spellbook_spell_spellbooks (spellbook_id)
+          .into('spellbook_spell_spellbooks')  // VALUES (spellbookId) RETURNING 'spell_id'
+          .transacting(trx) // should I do a transaction object or a query builder?? How would I chain then in either case?
+          .then(ids => {
+            newSpellIds.forEach(newSpellId => newSpellId.spell_id = ids[0]);
+            return db.insert(newSpellIds)
+              .into('spellbook_spell_spellbooks')
+              .transacting(trx);
+          })
+          .then(trx.commit)
+          .catch(trx.rollback);
+      });
+    // return db
+    //   .raw(`UPDATE spellbook_spell_spellbooks
+    //         SET spell_id = ?
+    //         WHERE spellbook_id = ??`, [spell_id], [spellbookId]);
   },
   serializeSpellBook(spellbook) {
   // The serialize function will CLEAN UP (e.g. sanitize and/or format) all data before we send it out as a response
