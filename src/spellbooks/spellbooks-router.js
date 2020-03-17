@@ -88,7 +88,9 @@ spellbooksRouter
       .catch(next);
   })
   .put(jsonParser, (req, res, next) => { // replaces all spells in the specified spellbook (e.g. when removing and adding spells to your spellbook)
-    
+    /**
+     * @param {Array} spell_ids - All the spell Ids you want to put in the database
+     */
     const { spell_ids } = req.body;
     let spellbookId = req.params.id;
 
