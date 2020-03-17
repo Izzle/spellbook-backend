@@ -118,7 +118,7 @@ spellbooksRouter
         error: `'spell_ids' must be an Array`
       });
     }
-    
+
     spell_ids.forEach(spell_id => {
       if(isNaN(spell_id) || !Number.isInteger(spell_id)) {
         return res.status(400).json({
