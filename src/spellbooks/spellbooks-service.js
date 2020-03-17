@@ -61,16 +61,16 @@ const SpellBooksService = {
           .where('spellbook_id', spellbookId)
           .del()
           .transacting(trx)
-          .then(() => {})
-
-        db.insert({spellbook_id: spellbookId}, 'spell_id') // INSERT INTO spellbook_spell_spellbooks (spellbook_id)
-          .into('spellbook_spell_spellbooks')  // VALUES (spellbookId) RETURNING 'spell_id'
-          .transacting(trx) // should I do a transaction object or a query builder?? How would I chain then in either case?
-          .then(ids => {
-            newSpellIds.forEach(newSpellId => newSpellId.spell_id = ids[0]);
-            return db.insert(newSpellIds)
-              .into('spellbook_spell_spellbooks')
-              .transacting(trx);
+          .then(() => {
+            return db.insert({spellbook_id: spellbookId}, 'spell_id') // INSERT INTO spellbook_spell_spellbooks (spellbook_id)
+              .into('spellbook_spell_spellbooks')  // VALUES (spellbookId) RETURNING 'spell_id'
+              .transacting(trx) // should I do a transaction object or a query builder?? How would I chain then in either case?
+              .then(ids => {
+                newSpellIds.forEach(newSpellId => newSpellId.spell_id = ids[0]);
+                return db.insert(newSpellIds)
+                  .into('spellbook_spell_spellbooks')
+                  .transacting(trx);
+              });
           })
           .then(trx.commit)
           .catch(trx.rollback);
