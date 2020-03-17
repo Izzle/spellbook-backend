@@ -33,18 +33,15 @@ const SpellBooksService = {
               sp_spbook.spellbook_id = ?`, [id])
       .then(resp => resp.rows);
   },
-  updateSpellsInSpellBook(db, spellbookId, newSpellIds) { // newRow should be the data
-    // Rather than UPDATE-ing everything, in this casee it will be simplier to remove everything and add new ones
+  /**
+   * Replace the spells in a spellbook
+   * This will delete all rows in the spellbook and insert new values
+   * @param {Object} db - The knex instance
+   * @param {number} spellbookId - The id of the spellbook
+   * @param {Array} newSpellIds - The id(s) of all spells you wish to be in the database
+   */
+  updateSpellsInSpellBook(db, spellbookId, newSpellIds) { 
 
-    // SET CONTENTS OF SPELLBOOK TO THIS
-    // make trx in knex
-    // dleete everything
-    // insert new values
-
-    // INPUT (db, spellbookId, newSpellIds)
-    // db = knex
-    // spellbookId = integer
-    // newSpellIds = array of integers ie [3, 4, 5, 6, 12]
     return db.transaction(trx => {  // they use function(trx) - could my syntax be an issue?
       db('spellbook_spell_spellbooks')
         .where('spellbook_id', spellbookId)
