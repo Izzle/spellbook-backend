@@ -40,45 +40,42 @@ const SpellBooksService = {
     // make trx in knex
     // dleete everything
     // insert new values
-    return db
-      .raw(`BEGIN;
-            DELETE FROM spellbook_spell_spellbooks WHERE spellbook_id = ${spellbookId} (use ? probably)
 
-            INSERT INTO spellbook_spell_spellbooks (spellbook_id, spell_id)
-            VALUES 
-              (${spellbookId}, ${newSpellIds}), // for each spellId. this will vary depending on # of entries
-              (${spellbookId}, ${newSpellIds}),
-              (${spellbookId}, ${newSpellIds}),
-              (${spellbookId}, ${newSpellIds});
-
-            COMMIT;`)
-      // INPUT (db, spellbookId, newSpellIds)
-      // db = knex
-      // spellbookId = integer
-      // newSpellIds = array of integers ie [3, 4, 5, 6, 12]
-      .transaction(trx => {  // they use function(trx) - could my syntax be an issue?
-        db('spellbook_spell_spellbooks')
-          .where('spellbook_id', spellbookId)
-          .del()
-          .transacting(trx)
-          .then(() => {
-            return db.insert({spellbook_id: spellbookId}, 'spell_id') // INSERT INTO spellbook_spell_spellbooks (spellbook_id)
-              .into('spellbook_spell_spellbooks')  // VALUES (spellbookId) RETURNING 'spell_id'
-              .transacting(trx) // should I do a transaction object or a query builder?? How would I chain then in either case?
-              .then(ids => {
-                newSpellIds.forEach(newSpellId => newSpellId.spell_id = ids[0]);
-                return db.insert(newSpellIds)
-                  .into('spellbook_spell_spellbooks')
-                  .transacting(trx);
-              });
-          })
-          .then(trx.commit)
-          .catch(trx.rollback);
-      });
+    // INPUT (db, spellbookId, newSpellIds)
+    // db = knex
+    // spellbookId = integer
+    // newSpellIds = array of integers ie [3, 4, 5, 6, 12]
+    return db.transaction(trx => {  // they use function(trx) - could my syntax be an issue?
+      db('spellbook_spell_spellbooks')
+        .where('spellbook_id', spellbookId)
+        .del()
+        .transacting(trx)
+        .then(() => {
+          return db.insert({spellbook_id: spellbookId}, 'spell_id') // INSERT INTO spellbook_spell_spellbooks (spellbook_id)
+            .into('spellbook_spell_spellbooks')  // VALUES (spellbookId) RETURNING 'spell_id'
+            .transacting(trx) // should I do a transaction object or a query builder?? How would I chain then in either case?
+            .then(ids => {
+              newSpellIds.forEach(newSpellId => newSpellId.spell_id = ids[0]);
+              return db.insert(newSpellIds)
+                .into('spellbook_spell_spellbooks')
+                .transacting(trx);
+            });
+        })
+        .then(trx.commit)
+        .catch(trx.rollback);
+    });
     // return db
-    //   .raw(`UPDATE spellbook_spell_spellbooks
-    //         SET spell_id = ?
-    //         WHERE spellbook_id = ??`, [spell_id], [spellbookId]);
+    //   .raw(`BEGIN;
+    //         DELETE FROM spellbook_spell_spellbooks WHERE spellbook_id = ${spellbookId} (use ? probably)
+
+    //         INSERT INTO spellbook_spell_spellbooks (spellbook_id, spell_id)
+    //         VALUES 
+    //           (${spellbookId}, ${newSpellIds}), // for each spellId. this will vary depending on # of entries
+    //           (${spellbookId}, ${newSpellIds}),
+    //           (${spellbookId}, ${newSpellIds}),
+    //           (${spellbookId}, ${newSpellIds});
+
+    //         COMMIT;`)
   },
   serializeSpellBook(spellbook) {
   // The serialize function will CLEAN UP (e.g. sanitize and/or format) all data before we send it out as a response
