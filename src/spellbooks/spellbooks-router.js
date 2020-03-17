@@ -88,22 +88,52 @@ spellbooksRouter
       .catch(next);
   })
   .put(jsonParser, (req, res, next) => { // replaces all spells in the specified spellbook (e.g. when removing and adding spells to your spellbook)
-    //res.status(204);
+    
+
     // NEED VALIDATION. NEEd to interate over an array of spells? maybe
 
-    // SET CONTENTS OF SPELLBOOK TO THIS
-    // make trx in knex
-    // dleete everything
-    // insert new values
+
+    const { spell_ids } = req.body;
+    let spellbookId = req.params.id;
+
+     
+    // VALIDATION HERE
+    // Validating to make sure that all the required fields are in the request
+    const newSpells = {spell_ids, spellbookId};  
+    for (const [key, value] of Object.entries(newSpells)) {
+      if (value == null) { // eslint-disable-line eqeqeq
+        return res.status(400).json({
+          error: `Missing '${key}' in request body`
+        });
+      }
+    }
+    
+    // jsonParser only parses the body, so req.params.id will be a STRING
+    spellbookId = Number(spellbookId);
+    // If spellbookId is NaN or a float it will respond 400
+    if(isNaN(spellbookId) || !Number.isInteger(spellbookId)) {
+      return res.status(400).json({
+        error: `'spellbookId' must be an integer number`
+      });
+    }
+
+    // check that the values spell_ids is an array of integers
+    spell_ids.forEach(spell_id => {
+      if(isNaN(spell_id) || !Number.isInteger(spell_id)) {
+        return res.status(400).json({
+          error: `'spell_ids' must be an array of integer number(s)`
+        });
+      }
+    });
+
     SpellBooksService.updateSpellsInSpellBook(
       req.app.get('db'),
-      2,
-      [2, 3, 4, 5]
-    ).then(newSpellBook => {
-      res.json(newSpellBook);
+      spellbookId,
+      spell_ids
+    ).then(() => {
+      res.status(204).end();
     })
       .catch(next);
-    // res.json({ message: 'youre teh best at the PUT method yo'});
   }); 
 
 spellbooksRouter
