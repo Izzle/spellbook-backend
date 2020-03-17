@@ -48,46 +48,21 @@ const SpellBooksService = {
         .del()
         .transacting(trx)
         .then(() => { 
-          newSpellIds.forEach(newSpell => {
-            // [2, 4, 6]
+          const newRows = newSpellIds.map(newSpell => {
+            // make a new row for each spell then insert the new rows
             // [{spellbook_id: spellbookId}, {spell_id: newSpellIds[0]}]
-            newSpell = [];
-            const spellbook = {spellbook_id: spellbookId};
-            const spell = {spell_id: newSpellIds[0]};
-            newSpell = [spellbook, spell];
-            // newSpell.spell_id = newSpellIds[0];
-            // newSpell.spellbook_id = spellbookId;
-            return db.insert(newSpell)
-              .into('spellbook_spell_spellbook')
-              .transacting(trx);
+            return {
+              spellbook_id: spellbookId,
+              spell_id: newSpell
+            };
           });
+          return db.insert(newRows)
+            .into('spellbook_spell_spellbook')
+            .transacting(trx);
         })
         .then(trx.commit)
         .catch(trx.rollback);
-      // .then(() => {
-      //   return db.insert({spellbook_id: spellbookId}, 'spell_id') // INSERT INTO spellbook_spell_spellbook (spellbook_id)
-      //     .into('spellbook_spell_spellbook')  // VALUES (spellbookId) RETURNING 'spell_id'
-      //     .then(ids => {
-      //       newSpellIds.forEach(newSpellId => newSpellId.spell_id = ids[0]);
-      //       return db.insert(newSpellIds)
-      //         .into('spellbook_spell_spellbook')
-      //         .transacting(trx);
-      //     });
-      // })
-        
     });
-    // return db
-    //   .raw(`BEGIN;
-    //         DELETE FROM spellbook_spell_spellbooks WHERE spellbook_id = ${spellbookId} (use ? probably)
-
-    //         INSERT INTO spellbook_spell_spellbooks (spellbook_id, spell_id)
-    //         VALUES 
-    //           (${spellbookId}, ${newSpellIds}), // for each spellId. this will vary depending on # of entries
-    //           (${spellbookId}, ${newSpellIds}),
-    //           (${spellbookId}, ${newSpellIds}),
-    //           (${spellbookId}, ${newSpellIds});
-
-    //         COMMIT;`)
   },
   serializeSpellBook(spellbook) {
   // The serialize function will CLEAN UP (e.g. sanitize and/or format) all data before we send it out as a response
