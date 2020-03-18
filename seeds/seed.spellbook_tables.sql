@@ -58,7 +58,7 @@ INSERT INTO spellbook_spellbooks (spellbook_name)
 VALUES
     ('Arcane Spelltome'),
     ('Necronomicon'),
-    (null);
+    ('Divine Spelltome');
 
 INSERT INTO spellbook_spell_spellbook (spellbook_id, spell_id)
 VALUES
