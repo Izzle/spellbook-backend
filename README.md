@@ -13,8 +13,8 @@ Complete the following steps to start a new project (NEW-PROJECT-NAME):
 5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
 6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
 7. Create your PostgreSQL databases `createdb -U your_username database-name` or `psql` -> `CREATE DATABASE database-name OWNER your-username;`. Also create a database for your tests (i.e. database-name-test).
-8. Change your config.js file so that DB_URL has a backup link. Remove `'postgresql://example_username@localhost/example_database_name'` and put in your correct information.
-9. Update the DB_URL and TEST_DB_URL links in your .env file.
+8. Change your config.js file so that DATABASE_URL has a backup link. Remove `'postgresql://example_username@localhost/example_database_name'` and put in your correct information.
+9. Update the DATABASE_URL and TEST_DATABASE_URL links in your .env file.
 10. Create migrations and seeds folders and create your migration and seed files. Type `npm run migrate` and `npm run migrate:test` to create the tables. 
 11. Seed your database with `psql -U your_username -d example-database-name -f ./seeds/seed.example_seed_file.sql` (do NOT seed your test database! We will do that in the tests themselves.)
 12. Delete `/src/examples` before you deploy or if you no longer need the reference.
