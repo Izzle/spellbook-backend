@@ -39,7 +39,17 @@ function makeSpellsArray() {
   ];
 }
 
-
+function cleanTables(db) {
+  return db.raw(
+    `TRUNCATE
+        spellbook_classes,
+        spellbook_class_spells,
+        spellbook_spells,
+        spellbook_spell_spellbook,
+        spellbook_spellbooks
+        RESTART IDENTITY CASCADE`
+  )
+}
 module.exports = {
 
 };
