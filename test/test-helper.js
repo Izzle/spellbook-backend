@@ -48,8 +48,14 @@ function cleanTables(db) {
         spellbook_spell_spellbook,
         spellbook_spellbooks
         RESTART IDENTITY CASCADE`
-  )
+  );
 }
-module.exports = {
 
+function seedSpellbookTables() {
+
+}
+
+module.exports = {
+  makeSpellsArray,
+  cleanTables
 };

@@ -19,4 +19,16 @@ describe('Spells Endpoint', function() {
   
   afterEach('cleanup', () => helpers.cleanTables(db));
 
+  describe('GET /api/spells', () => {
+    context('Given there are spells in the database', () => {
+      beforeEach('insert spells', () => {
+        helpers
+      });
+    });
+  });
+
+  describe('POST /api/spells', () => {});
+
+  describe('GET /api/spells/:id', () => {});
+
 });
