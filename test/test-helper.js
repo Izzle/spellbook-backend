@@ -39,6 +39,35 @@ function makeSpellsArray() {
   ];
 }
 
+function makeSpellBooksArray() {
+  return [
+    {
+      id: 1,
+      spellbook_name: 'Test Book'
+    },
+    {
+      id: 2,
+      spellbook_name: 'Spell Bookerson Jr.'
+    },
+    {
+      id: 3,
+      spellbook_name: 'How to Test Code and Influence Programs'
+    }
+  ];
+}
+
+function makeSpellsInSpellbooks() {
+  // functional stub right now
+}
+
+function makeSpellsFixtures() {
+  const testSpells = makeSpellsArray();
+  const testSpellBooks = makeSpellBooksArray();
+  const testSpellsInSpellbooks = makeSpellsInSpellbooks(testSpells, testSpellBooks);
+
+  return { testSpells, testSpellBooks, testSpellsInSpellbooks };
+}
+
 function cleanTables(db) {
   return db.raw(
     `TRUNCATE
@@ -75,6 +104,10 @@ function seedSpellbookTables(db, spells, spellbooks, spells_in_spellbooks) {
 
 module.exports = {
   makeSpellsArray,
+  makeSpellBooksArray,
+  makeSpellsInSpellbooks,
+  
+  makeSpellsFixtures,
   cleanTables,
   seedSpells,
   seedSpellbookTables
