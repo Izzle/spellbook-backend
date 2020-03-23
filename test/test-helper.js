@@ -43,7 +43,7 @@ function makeSpellBooksArray() {
   return [
     {
       id: 1,
-      spellbook_name: 'Test Book'
+      spellbook_name: 'Test Wizard SpellBook'
     },
     {
       id: 2,
@@ -56,8 +56,29 @@ function makeSpellBooksArray() {
   ];
 }
 
-function makeSpellsInSpellbooks() {
-  // functional stub right now
+function makeSpellsInSpellbooks(spells, spellbooks) {
+  return [
+    {
+      spell_id: spells[0].id,
+      spellbook_id: spellbooks[0].id
+    },
+    {
+      spell_id: spells[0].id,
+      spellbook_id: spellbooks[1].id
+    },
+    {
+      spell_id: spells[0].id,
+      spellbook_id: spellbooks[0].id
+    },
+    {
+      spell_id: spells[0].id,
+      spellbook_id: spellbooks[0].id
+    },
+    {
+      spell_id: spells[2].id,
+      spellbook_id: spellbooks[2].id
+    }
+  ];
 }
 
 function makeSpellsFixtures() {
@@ -68,7 +89,7 @@ function makeSpellsFixtures() {
   return { testSpells, testSpellBooks, testSpellsInSpellbooks };
 }
 
-function cleanTables(db) {
+function cleanTables(db) {  
   return db.raw(
     `TRUNCATE
         spellbook_classes,
