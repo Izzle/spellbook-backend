@@ -51,11 +51,31 @@ function cleanTables(db) {
   );
 }
 
-function seedSpellbookTables() {
+function seedSpells(db, spells) {
+  return db.into('spellbook_spells').insert(spells)
+   .then(() => {
+    // update the auto sequence to stay in sync
+    db.raw(`SELECT setval('spellbook_spells_id_seq', ?)`,
+      [spells[spells.length - 1].id])
+   });
+};
 
+function seedSpellbookTables(db, spells, spellbooks, spells_in_spellbooks) {
+  // make a transaction to group the queries and auto rollback on any failure
+  return db.transaction(async trx => {
+    await seedSpells(trx, spells);
+    await trx.into('spellbook_spellbooks').insert(spellbooks);
+    // update the auto sequence to stay in sync
+    await trx.raw(
+      `SELECT setval('spellbook_spellbooks_id_seq', ?)`,
+      [spellbooks[spellbooks - 1].id]
+    );
+  });
 }
 
 module.exports = {
   makeSpellsArray,
-  cleanTables
+  cleanTables,
+  seedSpells,
+  seedSpellbookTables
 };
